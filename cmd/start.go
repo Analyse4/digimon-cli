@@ -16,8 +16,8 @@ limitations under the License.
 package cmd
 
 import (
+	"digimon-cli/peer"
 	"fmt"
-
 	"github.com/spf13/cobra"
 )
 
@@ -31,9 +31,7 @@ and usage of using your command. For example:
 Cobra is a CLI library for Go that empowers applications.
 This application is a tool to generate the needed files
 to quickly create a Cobra application.`,
-	Run: func(cmd *cobra.Command, args []string) {
-		fmt.Println("start called")
-	},
+	Run: startHandler,
 }
 
 func init() {
@@ -48,4 +46,23 @@ func init() {
 	// Cobra supports local flags which will only run when this command
 	// is called directly, e.g.:
 	// startCmd.Flags().BoolP("toggle", "t", false, "Help message for toggle")
+}
+
+func startHandler(cmd *cobra.Command, args []string) {
+	ep := getEP()
+	//TODO: init connection
+	peer.ConnectGameServer(ep)
+	fmt.Println("Game server connect successful")
+	fmt.Println("Welcome to Digimon World")
+	//TODO: login
+	fmt.Println("login successful")
+	//TODO: join game
+}
+
+func getEP() string {
+	var ep string
+	fmt.Println("Please enter game server endpoint")
+	fmt.Scan(&ep)
+	fmt.Println(ep)
+	return ep
 }
