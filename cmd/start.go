@@ -16,9 +16,14 @@ limitations under the License.
 package cmd
 
 import (
-	"digimon-cli/peer"
+	"digimon-cli/handler"
+	"digimon-cli/peer/wsconnection"
+	"digimon-cli/tui"
 	"fmt"
+	"github.com/Analyse4/digimon/logger"
+	"github.com/sirupsen/logrus"
 	"github.com/spf13/cobra"
+	"time"
 )
 
 // startCmd represents the start command
@@ -34,6 +39,10 @@ to quickly create a Cobra application.`,
 	Run: startHandler,
 }
 
+var (
+	log *logrus.Entry
+)
+
 func init() {
 	rootCmd.AddCommand(startCmd)
 
@@ -46,16 +55,20 @@ func init() {
 	// Cobra supports local flags which will only run when this command
 	// is called directly, e.g.:
 	// startCmd.Flags().BoolP("toggle", "t", false, "Help message for toggle")
+
+	log = logger.GetLogger().WithField("pkg", "cmd")
 }
 
 func startHandler(cmd *cobra.Command, args []string) {
 	ep := getEP()
 	//TODO: init connection
-	peer.ConnectGameServer(ep)
-	fmt.Println("Game server connect successful")
-	fmt.Println("Welcome to Digimon World")
+	c := wsconnection.New()
+	c.Connect(ep)
+	//c := peer.ConnectGameServer(ep)
 	//TODO: login
-	fmt.Println("login successful")
+	loginTUI := tui.NewLogin()
+	handler.LoginReq(c, loginTUI)
+	time.Sleep(3600 * time.Second)
 	//TODO: join game
 }
 
@@ -63,6 +76,5 @@ func getEP() string {
 	var ep string
 	fmt.Println("Please enter game server endpoint")
 	fmt.Scan(&ep)
-	fmt.Println(ep)
 	return ep
 }
