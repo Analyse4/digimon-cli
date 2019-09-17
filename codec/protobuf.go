@@ -1,6 +1,7 @@
 package codec
 
 import (
+	"digimon-cli/handler"
 	"digimon-cli/pbprotocol"
 	"github.com/Analyse4/digimon/logger"
 	"github.com/golang/protobuf/proto"
@@ -8,7 +9,7 @@ import (
 	"reflect"
 )
 
-type ProtobufCodec struct{}
+type protobufCodec struct{}
 
 var (
 	log *logrus.Entry
@@ -18,11 +19,11 @@ func init() {
 	log = logger.GetLogger().WithField("pkg", "codec")
 }
 
-func NewProtobufCodec() *ProtobufCodec {
-	return new(ProtobufCodec)
+func NewProtobufCodec() *protobufCodec {
+	return new(protobufCodec)
 }
 
-func (pbc *ProtobufCodec) Marshal(router string, data interface{}) []byte {
+func (pbc *protobufCodec) Marshal(router string, data interface{}) ([]byte, error) {
 	d, ok := data.(proto.Message)
 	if !ok {
 		log.WithFields(logrus.Fields{
@@ -32,6 +33,7 @@ func (pbc *ProtobufCodec) Marshal(router string, data interface{}) []byte {
 	md, err := proto.Marshal(d)
 	if err != nil {
 		log.Warn(err)
+		return nil, err
 	}
 	bm := new(pbprotocol.MsgPack)
 	bm.Router = router
@@ -39,10 +41,25 @@ func (pbc *ProtobufCodec) Marshal(router string, data interface{}) []byte {
 	msg, err := proto.Marshal(bm)
 	if err != nil {
 		log.Warn(err)
+		return nil, err
 	}
-	return msg
+	return msg, nil
 }
 
-func (pbc *ProtobufCodec) UnMarshal([]byte) interface{} {
-	return nil
+func (pbc *protobufCodec) UnMarshal(msg []byte) (string, interface{}, error) {
+	bm := new(pbprotocol.MsgPack)
+	err := proto.Unmarshal(msg, bm)
+	if err != nil {
+		log.Println(err)
+		return "", nil, err
+	}
+	router := bm.Router
+	mdata := bm.Data
+	h, err := handler.GetDigimonCli().GetHandler(router)
+	if err != nil {
+		return router, nil, err
+	}
+	data := reflect.New(h.AckType).Interface()
+	proto.Unmarshal(mdata, data.(proto.Message))
+	return router, data, nil
 }

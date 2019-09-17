@@ -31,3 +31,9 @@ func LoginReq(conn peer.Connection, loginTUI *tui.Login) {
 	}
 	fmt.Println("login successful")
 }
+
+func (dc *digimonCli) Login(ack *pbprotocol.LoginAck) error {
+	fmt.Println(ack.PlayerInfo.Id)
+	fmt.Println(ack.PlayerInfo.Nickname)
+	return nil
+}

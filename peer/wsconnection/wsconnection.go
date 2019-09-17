@@ -10,6 +10,7 @@ import (
 	"github.com/sirupsen/logrus"
 	"net/url"
 	"os"
+	"reflect"
 	"sync"
 )
 
@@ -66,7 +67,8 @@ func (w *WSConnection) Connect(ep string) {
 
 func (w *WSConnection) Send(router string, data interface{}) {
 	pbc := codec.NewProtobufCodec()
-	msg := pbc.Marshal(router, data)
+	// TODO: error handler
+	msg, _ := pbc.Marshal(router, data)
 	w.buffer <- msg
 }
 
@@ -127,7 +129,20 @@ func (w *WSConnection) Refresh() {
 }
 
 func processMsg(data []byte) {
-
+	pbc := codec.NewProtobufCodec()
+	router, ack, err := pbc.UnMarshal(data)
+	if err != nil {
+		log.WithFields(logrus.Fields{
+			"router": router,
+		}).Error("unmarshal failed: " + err.Error())
+	}
+	h, _ := handler.GetDigimonCli().GetHandler(router)
+	resultSet := h.Method.Func.Call([]reflect.Value{reflect.ValueOf(ack)})
+	if resultSet[0].Interface() != nil {
+		log.WithFields(logrus.Fields{
+			"router": router,
+		}).Error("handler execute failed: " + resultSet[0].Interface().(error).Error())
+	}
 }
 
 func reconnect(ep string, reconnectTUI *tui.ReconnectTUI) {

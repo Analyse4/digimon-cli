@@ -60,6 +60,8 @@ func init() {
 }
 
 func startHandler(cmd *cobra.Command, args []string) {
+	dc := handler.New()
+	dc.Register()
 	ep := getEP()
 	//TODO: init connection
 	c := wsconnection.New()
