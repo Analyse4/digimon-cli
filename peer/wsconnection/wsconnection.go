@@ -70,6 +70,11 @@ func (w *WSConnection) Send(router string, data interface{}) {
 	// TODO: error handler
 	msg, _ := pbc.Marshal(router, data)
 	w.buffer <- msg
+
+	log.WithFields(logrus.Fields{
+		"router":   router,
+		"data_len": len(msg),
+	}).Debug("send data")
 }
 
 func (w *WSConnection) ReadLoop() {

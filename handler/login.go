@@ -5,7 +5,6 @@ import (
 	"digimon-cli/peer"
 	"digimon-cli/tui"
 	"fmt"
-	"github.com/sirupsen/logrus"
 	"os"
 )
 
@@ -17,11 +16,6 @@ func LoginReq(conn peer.Connection, loginTUI *tui.Login) {
 		ack := new(pbprotocol.LoginReq)
 		ack.Type = pbprotocol.LoginReq_Visitor
 		conn.Send("digimon.login", ack)
-
-		log.WithFields(logrus.Fields{
-			"router":   "digimon.login",
-			"data_len": ack.XXX_Size(),
-		}).Debug("send data")
 	case loginTUI.QUIT:
 		os.Exit(0)
 	default:
