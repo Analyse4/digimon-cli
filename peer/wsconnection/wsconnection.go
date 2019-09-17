@@ -86,6 +86,10 @@ func (w *WSConnection) ReadLoop() {
 			w.conn.WriteMessage(websocket.CloseMessage, websocket.FormatCloseMessage(websocket.CloseTryAgainLater, ""))
 			return
 		} else {
+			log.WithFields(logrus.Fields{
+				"len": len(data),
+			}).Debug("receive data")
+
 			processMsg(data)
 		}
 	}
@@ -137,7 +141,7 @@ func processMsg(data []byte) {
 		}).Error("unmarshal failed: " + err.Error())
 	}
 	h, _ := handler.GetDigimonCli().GetHandler(router)
-	resultSet := h.Method.Func.Call([]reflect.Value{reflect.ValueOf(ack)})
+	resultSet := h.Method.Func.Call([]reflect.Value{reflect.ValueOf(handler.GetDigimonCli()), reflect.ValueOf(ack)})
 	if resultSet[0].Interface() != nil {
 		log.WithFields(logrus.Fields{
 			"router": router,

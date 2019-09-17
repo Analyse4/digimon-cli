@@ -46,7 +46,7 @@ func (dc *digimonCli) Register() {
 			s := m.Name
 			router := "digimon." + strings.ToLower(s[:len(s)-3])
 			h := new(handler)
-			h.AckType = m.Type.In(0).Elem()
+			h.AckType = m.Type.In(1).Elem()
 			h.Method = m
 			dc.handlerRegister.Store(router, h)
 		}
@@ -55,7 +55,10 @@ func (dc *digimonCli) Register() {
 
 func (dc *digimonCli) Show() {
 	dc.handlerRegister.Range(func(key, value interface{}) bool {
-
+		fmt.Println("---------------")
+		fmt.Println(value.(*handler).AckType)
+		fmt.Println(value.(*handler).Method.Func)
+		return true
 	})
 }
 
@@ -76,7 +79,7 @@ func GetDigimonCli() *digimonCli {
 }
 
 func isProperMethod(m reflect.Method) bool {
-	if m.Type.NumIn() != 1 {
+	if m.Type.NumIn() != 2 {
 		return false
 	}
 	if m.Type.NumOut() != 1 {
