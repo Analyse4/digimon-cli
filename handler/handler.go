@@ -2,6 +2,7 @@ package handler
 
 import (
 	"digimon-cli/peer"
+	"digimon-cli/player"
 	"digimon/logger"
 	"fmt"
 	"github.com/sirupsen/logrus"
@@ -23,7 +24,7 @@ type handler struct {
 type digimonCli struct {
 	conn            peer.Connection
 	handlerRegister sync.Map
-	playerID        uint16
+	player          *player.Player
 }
 
 func init() {
@@ -34,6 +35,7 @@ func New() *digimonCli {
 	dc = &digimonCli{
 		conn:            nil,
 		handlerRegister: sync.Map{},
+		player:          player.New(),
 	}
 	return dc
 }

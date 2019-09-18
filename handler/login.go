@@ -27,7 +27,9 @@ func LoginReq(conn peer.Connection, loginTUI *tui.Login) {
 }
 
 func (dc *digimonCli) LoginAck(ack *pbprotocol.LoginAck) error {
-	fmt.Println(ack.PlayerInfo.Id)
-	fmt.Println(ack.PlayerInfo.Nickname)
+	dc.player.ID = ack.PlayerInfo.Id
+	dc.player.NickName = ack.PlayerInfo.Nickname
+	fmt.Println(dc.player.ID)
+	fmt.Println(dc.player.NickName)
 	return nil
 }
