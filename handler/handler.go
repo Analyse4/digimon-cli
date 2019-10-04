@@ -3,6 +3,7 @@ package handler
 import (
 	"digimon-cli/peer"
 	"digimon-cli/player"
+	"digimon-cli/room"
 	"digimon/logger"
 	"fmt"
 	"github.com/sirupsen/logrus"
@@ -25,6 +26,7 @@ type digimonCli struct {
 	conn            peer.Connection
 	handlerRegister sync.Map
 	player          *player.Player
+	room            *room.Room
 }
 
 func init() {
@@ -36,6 +38,7 @@ func New() *digimonCli {
 		conn:            nil,
 		handlerRegister: sync.Map{},
 		player:          player.New(),
+		room:            room.New(),
 	}
 	return dc
 }

@@ -71,8 +71,10 @@ func startHandler(cmd *cobra.Command, args []string) {
 	//TODO: login
 	loginTUI := tui.NewLogin()
 	handler.LoginReq(c, loginTUI)
-	time.Sleep(3600 * time.Second)
 	//TODO: join game
+	joinRoomTUI := tui.NewJoinRoom()
+	handler.JoinRoomReq(c, joinRoomTUI)
+	time.Sleep(3600 * time.Second)
 }
 
 func getEP() string {
