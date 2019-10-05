@@ -162,6 +162,8 @@ func reconnect(ep string, reconnectTUI *tui.ReconnectTUI) {
 		c.Connect(ep)
 		loginTUI := tui.NewLogin()
 		handler.LoginReq(c, loginTUI)
+		joinRoomTUI := tui.NewJoinRoom()
+		handler.JoinRoomReq(c, joinRoomTUI)
 		//TODO: main logic need write here
 	case reconnectTUI.QUIT:
 		os.Exit(0)

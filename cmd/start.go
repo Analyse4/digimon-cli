@@ -68,10 +68,8 @@ func startHandler(cmd *cobra.Command, args []string) {
 	c := wsconnection.New()
 	c.Connect(ep)
 	//c := peer.ConnectGameServer(ep)
-	//TODO: login
 	loginTUI := tui.NewLogin()
 	handler.LoginReq(c, loginTUI)
-	//TODO: join game
 	joinRoomTUI := tui.NewJoinRoom()
 	handler.JoinRoomReq(c, joinRoomTUI)
 	time.Sleep(3600 * time.Second)
