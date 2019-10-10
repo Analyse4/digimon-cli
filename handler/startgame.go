@@ -30,7 +30,9 @@ func (dc *digimonCli) StartGameAck(ack *pbprotocol.StartGameAck) error {
 			}
 		}
 	}
+	dc.player.Show()
 	skillTUI := tui.NewSkill()
-	ReleaseSkillReq(dc.conn, dc.player, skillTUI)
+	skillTUI.SetHero(dc.player.DigiMonster)
+	ReleaseSkillReq(dc.conn, skillTUI)
 	return nil
 }

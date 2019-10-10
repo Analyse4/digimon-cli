@@ -10,6 +10,7 @@ type Room struct {
 	Type        int32
 	CurrentNum  uint32
 	PlayerInfos []*player.Player
+	Round       int32
 }
 
 func New() *Room {
@@ -19,5 +20,6 @@ func New() *Room {
 		Type:        0,
 		CurrentNum:  0,
 		PlayerInfos: nil,
+		Round:       1,
 	}
 }

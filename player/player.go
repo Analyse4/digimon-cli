@@ -1,6 +1,9 @@
 package player
 
-import "digimon-cli/pbprotocol"
+import (
+	"digimon-cli/pbprotocol"
+	"fmt"
+)
 
 type Hero struct {
 	Identity      pbprotocol.DigimonIdentity
@@ -16,6 +19,8 @@ type Player struct {
 	NickName    string
 	LoginType   int32
 	DigiMonster *Hero
+	RoomID      uint64
+	Seat        int32
 }
 
 func New() *Player {
@@ -24,5 +29,21 @@ func New() *Player {
 		NickName:    "",
 		LoginType:   -1,
 		DigiMonster: new(Hero),
+		RoomID:      0,
+		Seat:        -1,
 	}
+}
+
+//Debug
+func (pl *Player) Show() {
+	fmt.Printf("ID: %d\n", pl.ID)
+	fmt.Printf("Name: %s\n", pl.NickName)
+	fmt.Printf("RoomID: %d\n", pl.RoomID)
+	fmt.Printf("Seat: %d\n", pl.Seat)
+	fmt.Printf("Identity: %d\n", pl.DigiMonster.Identity)
+	fmt.Printf("IdentityLevel: %d\n", pl.DigiMonster.IdentityLevel)
+	fmt.Printf("SkillType: %d\n", pl.DigiMonster.SkillType)
+	fmt.Printf("SkillPoint: %d\n", pl.DigiMonster.SkillPoint)
+	fmt.Printf("SkillLevel: %d\n", pl.DigiMonster.SkillLevel)
+	fmt.Printf("SkillName: %s\n", pl.DigiMonster.SkillName)
 }

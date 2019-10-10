@@ -4,6 +4,7 @@ import (
 	"digimon-cli/pbprotocol"
 	"digimon-cli/player"
 	"fmt"
+	"github.com/sirupsen/logrus"
 )
 
 const (
@@ -14,7 +15,7 @@ const (
 )
 
 type Skill struct {
-	hero       *player.Hero
+	H          *player.Hero
 	result     uint8
 	SkillType  uint8
 	SkillLevel uint8
@@ -27,10 +28,10 @@ type Skill struct {
 }
 
 func (s *Skill) Show() {
-	if s.hero.SkillPoint < 0 {
+	if s.H.SkillPoint < 0 {
 		return
 	}
-	switch s.hero.SkillPoint {
+	switch s.H.SkillPoint {
 	case 0:
 		fmt.Println("please chose Power Up or Defence or Escape or Quit, input number only")
 		fmt.Println("1.Power Up		2.Defence		3.Escape		4.Quit")
@@ -40,17 +41,27 @@ func (s *Skill) Show() {
 		fmt.Println("1.Power Up		2.Defence		3.Escape		4.Quit		5.Attack")
 		fmt.Scan(&s.result)
 	default:
-		fmt.Println("please chose Power Up or Defence or Escape or Quit or Attack or Evolve, input number only")
-		fmt.Println("1.Power Up		2.Defence		3.Escape		4.Quit		5.Attack		6.Evolve")
-		fmt.Scan(&s.result)
+		if s.H.IdentityLevel == CHAMPION && s.H.SkillPoint < 3 {
+			fmt.Println("please chose Power Up or Defence or Escape or Quit or Attack, input number only")
+			fmt.Println("1.Power Up		2.Defence		3.Escape		4.Quit		5.Attack")
+			fmt.Scan(&s.result)
+		} else if s.H.Identity == pbprotocol.DigimonIdentity_WEREGARURUMON || s.H.Identity == pbprotocol.DigimonIdentity_SKULLGREYMON {
+			fmt.Println("please chose Power Up or Defence or Escape or Quit or Attack, input number only")
+			fmt.Println("1.Power Up		2.Defence		3.Escape		4.Quit		5.Attack")
+			fmt.Scan(&s.result)
+		} else {
+			fmt.Println("please chose Power Up or Defence or Escape or Quit or Attack or Evolve, input number only")
+			fmt.Println("1.Power Up		2.Defence		3.Escape		4.Quit		5.Attack		6.Evolve")
+			fmt.Scan(&s.result)
+		}
 	}
 }
 
-func (s *Skill) ShowLevel(h *player.Hero) {
+func (s *Skill) ShowLevel() {
 	switch s.SkillType {
 	case s.ATTACK:
-		if h.Identity == pbprotocol.DigimonIdentity_TOGEMON || h.Identity == pbprotocol.DigimonIdentity_ANGEMON || h.Identity == pbprotocol.DigimonIdentity_LILLYMON || h.Identity == pbprotocol.DigimonIdentity_ZUDOMON || h.Identity == pbprotocol.DigimonIdentity_GARUDAMON || h.Identity == pbprotocol.DigimonIdentity_MAGNAANGEMON || h.Identity == pbprotocol.DigimonIdentity_WEREGARURUMON || h.Identity == pbprotocol.DigimonIdentity_SKULLGREYMON || h.Identity == pbprotocol.DigimonIdentity_ANGEWOMON || h.Identity == pbprotocol.DigimonIdentity_WARGREYMON || h.Identity == pbprotocol.DigimonIdentity_METALGARURUMON {
-			if h.SkillPoint >= 5 && (h.Identity == pbprotocol.DigimonIdentity_WARGREYMON || h.Identity == pbprotocol.DigimonIdentity_METALGARURUMON) {
+		if s.H.Identity == pbprotocol.DigimonIdentity_TOGEMON || s.H.Identity == pbprotocol.DigimonIdentity_ANGEMON || s.H.Identity == pbprotocol.DigimonIdentity_LILLYMON || s.H.Identity == pbprotocol.DigimonIdentity_ZUDOMON || s.H.Identity == pbprotocol.DigimonIdentity_GARUDAMON || s.H.Identity == pbprotocol.DigimonIdentity_MAGNAANGEMON || s.H.Identity == pbprotocol.DigimonIdentity_WEREGARURUMON || s.H.Identity == pbprotocol.DigimonIdentity_SKULLGREYMON || s.H.Identity == pbprotocol.DigimonIdentity_ANGEWOMON || s.H.Identity == pbprotocol.DigimonIdentity_WARGREYMON || s.H.Identity == pbprotocol.DigimonIdentity_METALGARURUMON {
+			if s.H.SkillPoint >= 5 && (s.H.Identity == pbprotocol.DigimonIdentity_WARGREYMON || s.H.Identity == pbprotocol.DigimonIdentity_METALGARURUMON) {
 				fmt.Println("please chose attack level, input number only")
 				fmt.Println("1.one		2.two		3.five")
 				fmt.Scan(&s.result)
@@ -62,14 +73,16 @@ func (s *Skill) ShowLevel(h *player.Hero) {
 				fmt.Println("1.one		2.two")
 				fmt.Scan(&s.result)
 			}
+		} else {
+			s.result = 1
 		}
 	case s.DEFENCE:
 		fmt.Println("please chose defence level, input number only")
 		fmt.Println("1.one		2.two		3.three		4.four")
 		fmt.Scan(&s.result)
 	case s.EVOLVE:
-		if h.IdentityLevel == ROOKIE {
-			if h.SkillPoint >= 5 && (h.Identity == pbprotocol.DigimonIdentity_AGUMON || h.Identity == pbprotocol.DigimonIdentity_GABUMON) {
+		if s.H.IdentityLevel == ROOKIE {
+			if s.H.SkillPoint >= 5 && (s.H.Identity == pbprotocol.DigimonIdentity_AGUMON || s.H.Identity == pbprotocol.DigimonIdentity_GABUMON) {
 				fmt.Println("please chose evolve type, input number only")
 				fmt.Println("1.evolve		2.mega-evolve")
 				fmt.Scan(&s.result)
@@ -81,8 +94,8 @@ func (s *Skill) ShowLevel(h *player.Hero) {
 				fmt.Println("1.evolve")
 				fmt.Scan(&s.result)
 			}
-		} else if h.IdentityLevel == CHAMPION && h.SkillPoint >= 3 {
-			if h.SkillPoint >= 5 && (h.Identity == pbprotocol.DigimonIdentity_GREYMON || h.Identity == pbprotocol.DigimonIdentity_GARURUMON) {
+		} else if s.H.IdentityLevel == CHAMPION && s.H.SkillPoint >= 3 {
+			if s.H.SkillPoint >= 5 && (s.H.Identity == pbprotocol.DigimonIdentity_GREYMON || s.H.Identity == pbprotocol.DigimonIdentity_GARURUMON) {
 				fmt.Println("please chose evolve type, input number only")
 				fmt.Println("1.super-evolve		2.mega-evolve")
 				fmt.Scan(&s.result)
@@ -92,7 +105,7 @@ func (s *Skill) ShowLevel(h *player.Hero) {
 				fmt.Scan(&s.result)
 			}
 			s.result++
-		} else if h.IdentityLevel == ULTIMATE && h.SkillPoint >= 5 && (h.Identity == pbprotocol.DigimonIdentity_SKULLGREYMON || h.Identity == pbprotocol.DigimonIdentity_WEREGARURUMON) {
+		} else if s.H.IdentityLevel == ULTIMATE && s.H.SkillPoint >= 5 && (s.H.Identity == pbprotocol.DigimonIdentity_SKULLGREYMON || s.H.Identity == pbprotocol.DigimonIdentity_WEREGARURUMON) {
 			fmt.Println("please chose evolve type, input number only")
 			fmt.Println("1.mega-evolve")
 			fmt.Scan(&s.result)
@@ -107,7 +120,7 @@ func (s *Skill) Result() uint8 {
 
 func NewSkill() *Skill {
 	return &Skill{
-		hero:       new(player.Hero),
+		H:          new(player.Hero),
 		result:     0,
 		SkillType:  0,
 		SkillLevel: 0,
@@ -133,29 +146,47 @@ func (s *Skill) RefreshLevel() {
 }
 
 func (s *Skill) IsSkillTypValid() bool {
-	switch s.SkillType {
-	case s.POWERUP:
-		return true
-	case s.DEFENCE:
-		return true
-	case s.ESCAPE:
-		return true
-	case s.QUIT:
-		return true
-	case s.ATTACK:
-		return true
-	case s.EVOLVE:
-		return true
+	switch s.H.SkillPoint {
+	case 0:
+		if s.SkillType == 1 || s.SkillType == 2 || s.SkillType == 3 || s.SkillType == 4 {
+			return true
+		} else {
+			return false
+		}
+	case 1:
+		if s.SkillType == 1 || s.SkillType == 2 || s.SkillType == 3 || s.SkillType == 4 || s.SkillType == 5 {
+			return true
+		} else {
+			return false
+		}
 	default:
-		return false
+		if s.H.IdentityLevel == CHAMPION && s.H.SkillPoint < 3 {
+			if s.SkillType == 1 || s.SkillType == 2 || s.SkillType == 3 || s.SkillType == 4 || s.SkillType == 5 {
+				return true
+			} else {
+				return false
+			}
+		} else if s.H.Identity == pbprotocol.DigimonIdentity_WEREGARURUMON || s.H.Identity == pbprotocol.DigimonIdentity_SKULLGREYMON {
+			if s.SkillType == 1 || s.SkillType == 2 || s.SkillType == 3 || s.SkillType == 4 || s.SkillType == 5 {
+				return true
+			} else {
+				return false
+			}
+		} else {
+			if s.SkillType == 1 || s.SkillType == 2 || s.SkillType == 3 || s.SkillType == 4 || s.SkillType == 5 || s.SkillType == 6 {
+				return true
+			} else {
+				return false
+			}
+		}
 	}
 }
 
-func (s *Skill) IsSkillLevelValid(h *player.Hero) bool {
+func (s *Skill) IsSkillLevelValid() bool {
 	switch s.SkillType {
 	case s.ATTACK:
-		if h.Identity == pbprotocol.DigimonIdentity_TOGEMON || h.Identity == pbprotocol.DigimonIdentity_ANGEMON || h.Identity == pbprotocol.DigimonIdentity_LILLYMON || h.Identity == pbprotocol.DigimonIdentity_ZUDOMON || h.Identity == pbprotocol.DigimonIdentity_GARUDAMON || h.Identity == pbprotocol.DigimonIdentity_MAGNAANGEMON || h.Identity == pbprotocol.DigimonIdentity_WEREGARURUMON || h.Identity == pbprotocol.DigimonIdentity_SKULLGREYMON || h.Identity == pbprotocol.DigimonIdentity_ANGEWOMON || h.Identity == pbprotocol.DigimonIdentity_WARGREYMON || h.Identity == pbprotocol.DigimonIdentity_METALGARURUMON {
-			if h.SkillPoint >= 5 && (h.Identity == pbprotocol.DigimonIdentity_WARGREYMON || h.Identity == pbprotocol.DigimonIdentity_METALGARURUMON) {
+		if s.H.Identity == pbprotocol.DigimonIdentity_TOGEMON || s.H.Identity == pbprotocol.DigimonIdentity_ANGEMON || s.H.Identity == pbprotocol.DigimonIdentity_LILLYMON || s.H.Identity == pbprotocol.DigimonIdentity_ZUDOMON || s.H.Identity == pbprotocol.DigimonIdentity_GARUDAMON || s.H.Identity == pbprotocol.DigimonIdentity_MAGNAANGEMON || s.H.Identity == pbprotocol.DigimonIdentity_WEREGARURUMON || s.H.Identity == pbprotocol.DigimonIdentity_SKULLGREYMON || s.H.Identity == pbprotocol.DigimonIdentity_ANGEWOMON || s.H.Identity == pbprotocol.DigimonIdentity_WARGREYMON || s.H.Identity == pbprotocol.DigimonIdentity_METALGARURUMON {
+			if s.H.SkillPoint >= 5 && (s.H.Identity == pbprotocol.DigimonIdentity_WARGREYMON || s.H.Identity == pbprotocol.DigimonIdentity_METALGARURUMON) {
 				if s.SkillLevel == 1 || s.SkillLevel == 2 || s.SkillLevel == 5 {
 					return true
 				} else {
@@ -169,7 +200,11 @@ func (s *Skill) IsSkillLevelValid(h *player.Hero) bool {
 				}
 			}
 		} else {
-			return false
+			if s.SkillLevel == 1 {
+				return true
+			} else {
+				return false
+			}
 		}
 	case s.DEFENCE:
 		if s.SkillLevel == 1 || s.SkillLevel == 2 || s.SkillLevel == 3 || s.SkillLevel == 4 {
@@ -178,9 +213,9 @@ func (s *Skill) IsSkillLevelValid(h *player.Hero) bool {
 			return false
 		}
 	case s.EVOLVE:
-		if h.IdentityLevel == ROOKIE {
-			if h.SkillPoint >= 5 && (h.Identity == pbprotocol.DigimonIdentity_AGUMON || h.Identity == pbprotocol.DigimonIdentity_GABUMON) {
-				if s.SkillLevel == 1 || s.SkillLevel == 2 {
+		if s.H.IdentityLevel == ROOKIE {
+			if s.H.SkillPoint >= 5 && (s.H.Identity == pbprotocol.DigimonIdentity_AGUMON || s.H.Identity == pbprotocol.DigimonIdentity_GABUMON) {
+				if s.SkillLevel == 1 || s.SkillLevel == 3 {
 					return true
 				} else {
 					return false
@@ -192,30 +227,32 @@ func (s *Skill) IsSkillLevelValid(h *player.Hero) bool {
 					return false
 				}
 			}
-		} else if h.IdentityLevel == CHAMPION && h.SkillPoint >= 3 {
-			if h.SkillPoint >= 5 && (h.Identity == pbprotocol.DigimonIdentity_GREYMON || h.Identity == pbprotocol.DigimonIdentity_GARURUMON) {
-				if s.SkillLevel == 1 || s.SkillLevel == 2 {
+		} else if s.H.IdentityLevel == CHAMPION && s.H.SkillPoint >= 3 {
+			if s.H.SkillPoint >= 5 && (s.H.Identity == pbprotocol.DigimonIdentity_GREYMON || s.H.Identity == pbprotocol.DigimonIdentity_GARURUMON) {
+				if s.SkillLevel == 2 || s.SkillLevel == 3 {
 					return true
 				} else {
 					return false
 				}
 			} else {
-				if s.SkillLevel == 1 {
+				if s.SkillLevel == 2 {
 					return true
 				} else {
 					return false
 				}
 			}
-		} else if h.IdentityLevel == ULTIMATE && h.SkillPoint >= 5 && (h.Identity == pbprotocol.DigimonIdentity_SKULLGREYMON || h.Identity == pbprotocol.DigimonIdentity_WEREGARURUMON) {
-			if s.SkillLevel == 1 {
+		} else if s.H.IdentityLevel == ULTIMATE && s.H.SkillPoint >= 5 && (s.H.Identity == pbprotocol.DigimonIdentity_SKULLGREYMON || s.H.Identity == pbprotocol.DigimonIdentity_WEREGARURUMON) {
+			if s.SkillLevel == 3 {
 				return true
 			} else {
 				return false
 			}
 		} else {
+			logrus.Errorln("attribute invalid")
 			return false
 		}
 	default:
+		logrus.Errorln("attribute invalid")
 		return false
 	}
 }
@@ -231,4 +268,8 @@ func (s *Skill) IsLevelType() bool {
 	default:
 		return false
 	}
+}
+
+func (s *Skill) SetHero(hero *player.Hero) {
+	s.H = hero
 }

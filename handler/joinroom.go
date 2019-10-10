@@ -36,9 +36,15 @@ func (dc *digimonCli) JoinRoomAck(ack *pbprotocol.JoinRoomAck) error {
 	dc.room.CurrentNum = ack.RoomInfo.CurrentPlayerNum
 	dc.room.IsStart = ack.RoomInfo.IsStart
 	for _, v := range ack.RoomInfo.PlayerInfos {
+		if v.Id == dc.player.ID {
+			dc.player.RoomID = v.RoomId
+			dc.player.Seat = v.Seat
+		}
 		tmpPlayer := new(player.Player)
 		tmpPlayer.ID = v.Id
 		tmpPlayer.NickName = v.Nickname
+		tmpPlayer.RoomID = v.RoomId
+		tmpPlayer.Seat = v.Seat
 		tmpPlayer.DigiMonster = new(player.Hero)
 		dc.room.PlayerInfos = append(dc.room.PlayerInfos, tmpPlayer)
 	}
