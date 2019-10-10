@@ -67,6 +67,7 @@ func startHandler(cmd *cobra.Command, args []string) {
 	//TODO: init connection
 	c := wsconnection.New()
 	c.Connect(ep)
+	dc.SetConn(c)
 	//c := peer.ConnectGameServer(ep)
 	loginTUI := tui.NewLogin()
 	handler.LoginReq(c, loginTUI)

@@ -6,6 +6,10 @@ import (
 )
 
 func (dc *digimonCli) StartGameAck(ack *pbprotocol.StartGameAck) error {
+	dc.room.Id = ack.RoomInfo.RoomId
+	dc.room.CurrentNum = ack.RoomInfo.CurrentPlayerNum
+	dc.room.Type = int32(ack.RoomInfo.Type)
+	dc.room.IsStart = ack.RoomInfo.IsStart
 	for _, v := range ack.RoomInfo.PlayerInfos {
 		if v.Id == dc.player.ID {
 			dc.player.DigiMonster.Identity = v.Hero.Identity
