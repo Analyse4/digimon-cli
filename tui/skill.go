@@ -8,10 +8,21 @@ import (
 )
 
 const (
-	ROOKIE = iota + 7
+	ROOKIE = iota + 1
 	CHAMPION
 	ULTIMATE
 	MEGA
+)
+
+const (
+	ATTACKER = iota + 1
+	TARGET
+)
+
+const (
+	ROCK = iota + 1
+	PAPER
+	SCISSORS
 )
 
 type Skill struct {
