@@ -10,16 +10,21 @@ import (
 
 func ReleaseSkillReq(conn peer.Connection, skillTUI *tui.Skill) {
 	req := new(pbprotocol.ReleaseSkillReq)
+	req.SkillTargets = make([]uint64, 0)
 	skillTUI.Show()
 	skillTUI.SkillType = skillTUI.Result()
 	if skillTUI.IsSkillTypValid() {
 		if (skillTUI.H.SkillPoint >= 2 && skillTUI.Result() == skillTUI.ATTACK) || skillTUI.Result() == skillTUI.DEFENCE || (skillTUI.H.SkillPoint >= 2 && skillTUI.Result() == skillTUI.EVOLVE) {
-			secondShow(skillTUI, req, conn)
+			secondShow(skillTUI)
 		} else {
 			skillTUI.SkillLevel = 1
 		}
+		if skillTUI.SkillType == skillTUI.ATTACK {
+			attackTargetShow(skillTUI)
+		}
 		req.SkillType = int32(skillTUI.SkillType)
 		req.SkillLevel = int32(skillTUI.SkillLevel)
+		req.SkillTargets = append(req.SkillTargets, skillTUI.SkillTargets...)
 		conn.Send("digimon.releaseskill", req)
 	} else {
 		fmt.Println("invalid input, please reselect")
@@ -43,15 +48,24 @@ func (dc *digimonCli) ReleaseSkillAck(ack *pbprotocol.ReleaseSkillAck) error {
 	return nil
 }
 
-func secondShow(skillTUI *tui.Skill, req *pbprotocol.ReleaseSkillReq, conn peer.Connection) {
+func secondShow(skillTUI *tui.Skill) {
 	skillTUI.ShowLevel()
 	skillTUI.SkillLevel = skillTUI.Result()
-	if skillTUI.IsSkillLevelValid() {
-		req.SkillLevel = int32(skillTUI.SkillLevel)
-	} else {
+	if !skillTUI.IsSkillLevelValid() {
 		fmt.Println("invalid input, please reselect")
 		skillTUI.Refresh()
 		skillTUI.RefreshLevel()
-		secondShow(skillTUI, req, conn)
+		secondShow(skillTUI)
+	}
+}
+
+func attackTargetShow(skillTUI *tui.Skill) {
+	skillTUI.ShowAttackTarget()
+	skillTUI.SkillTargets = append(skillTUI.SkillTargets, skillTUI.RoomIDList[int(skillTUI.Result())])
+	if !skillTUI.IsSkillTargetValid() {
+		fmt.Println("invalid input, please reselect")
+		skillTUI.Refresh()
+		skillTUI.RefreshSkillTargets()
+		attackTargetShow(skillTUI)
 	}
 }

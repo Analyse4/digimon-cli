@@ -40,16 +40,34 @@ func (dc *digimonCli) JoinRoomAck(ack *pbprotocol.JoinRoomAck) error {
 			dc.player.RoomID = v.RoomId
 			dc.player.Seat = v.Seat
 		}
-		tmpPlayer := new(player.Player)
-		tmpPlayer.ID = v.Id
-		tmpPlayer.NickName = v.Nickname
-		tmpPlayer.RoomID = v.RoomId
-		tmpPlayer.Seat = v.Seat
-		tmpPlayer.DigiMonster = new(player.Hero)
-		dc.room.PlayerInfos = append(dc.room.PlayerInfos, tmpPlayer)
+		if IsNewPlayer(v, dc.room.PlayerInfos) {
+			tmpPlayer := new(player.Player)
+			tmpPlayer.ID = v.Id
+			tmpPlayer.NickName = v.Nickname
+			tmpPlayer.RoomID = v.RoomId
+			tmpPlayer.Seat = v.Seat
+			tmpPlayer.DigiMonster = new(player.Hero)
+			if int(v.Seat) < len(dc.room.PlayerInfos) {
+				dc.room.PlayerInfos[v.Seat] = tmpPlayer
+			} else {
+				dc.room.PlayerInfos = append(dc.room.PlayerInfos, tmpPlayer)
+			}
+		}
 	}
 	dc.ShowRoomInfo()
 	return nil
+}
+
+func IsNewPlayer(pl *pbprotocol.PlayerInfo, pls []*player.Player) bool {
+	for _, p := range pls {
+		if p == nil {
+			continue
+		}
+		if p.ID == pl.Id {
+			return false
+		}
+	}
+	return true
 }
 
 func (dc *digimonCli) ShowRoomInfo() {

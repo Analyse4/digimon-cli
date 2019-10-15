@@ -19,7 +19,7 @@ func New() *Room {
 		IsStart:     false,
 		Type:        0,
 		CurrentNum:  0,
-		PlayerInfos: nil,
+		PlayerInfos: make([]*player.Player, 0),
 		Round:       1,
 	}
 }

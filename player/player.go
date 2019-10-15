@@ -12,6 +12,7 @@ type Hero struct {
 	SkillType     int32
 	SkillLevel    int32
 	SkillName     string
+	IsDead        bool
 }
 
 type Player struct {
@@ -40,6 +41,7 @@ func (pl *Player) Show() {
 	fmt.Printf("Name: %s\n", pl.NickName)
 	fmt.Printf("RoomID: %d\n", pl.RoomID)
 	fmt.Printf("Seat: %d\n", pl.Seat)
+	fmt.Printf("Dead: %v\n", pl.DigiMonster.IsDead)
 	fmt.Printf("Identity: %d\n", pl.DigiMonster.Identity)
 	fmt.Printf("IdentityLevel: %d\n", pl.DigiMonster.IdentityLevel)
 	fmt.Printf("SkillType: %d\n", pl.DigiMonster.SkillType)

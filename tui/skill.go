@@ -14,28 +14,19 @@ const (
 	MEGA
 )
 
-const (
-	ATTACKER = iota + 1
-	TARGET
-)
-
-const (
-	ROCK = iota + 1
-	PAPER
-	SCISSORS
-)
-
 type Skill struct {
-	H          *player.Hero
-	result     uint8
-	SkillType  uint8
-	SkillLevel uint8
-	POWERUP    uint8
-	DEFENCE    uint8
-	ESCAPE     uint8
-	QUIT       uint8
-	ATTACK     uint8
-	EVOLVE     uint8
+	H            *player.Hero
+	result       uint8
+	RoomIDList   []uint64
+	SkillType    uint8
+	SkillLevel   uint8
+	SkillTargets []uint64
+	POWERUP      uint8
+	DEFENCE      uint8
+	ESCAPE       uint8
+	QUIT         uint8
+	ATTACK       uint8
+	EVOLVE       uint8
 }
 
 func (s *Skill) Show() {
@@ -125,22 +116,29 @@ func (s *Skill) ShowLevel() {
 	}
 }
 
+func (s *Skill) ShowAttackTarget() {
+	//TODO: show
+	s.result = 0
+}
+
 func (s *Skill) Result() uint8 {
 	return s.result
 }
 
 func NewSkill() *Skill {
 	return &Skill{
-		H:          new(player.Hero),
-		result:     0,
-		SkillType:  0,
-		SkillLevel: 0,
-		POWERUP:    1,
-		DEFENCE:    2,
-		ESCAPE:     3,
-		QUIT:       4,
-		ATTACK:     5,
-		EVOLVE:     6,
+		H:            new(player.Hero),
+		result:       0,
+		RoomIDList:   make([]uint64, 0),
+		SkillType:    0,
+		SkillLevel:   0,
+		SkillTargets: make([]uint64, 0),
+		POWERUP:      1,
+		DEFENCE:      2,
+		ESCAPE:       3,
+		QUIT:         4,
+		ATTACK:       5,
+		EVOLVE:       6,
 	}
 }
 
@@ -154,6 +152,11 @@ func (s *Skill) RefreshType() {
 
 func (s *Skill) RefreshLevel() {
 	s.SkillLevel = 0
+}
+
+func (s *Skill) RefreshSkillTargets() {
+	s.SkillTargets = nil
+	s.SkillTargets = make([]uint64, 0)
 }
 
 func (s *Skill) IsSkillTypValid() bool {
@@ -283,4 +286,11 @@ func (s *Skill) IsLevelType() bool {
 
 func (s *Skill) SetHero(hero *player.Hero) {
 	s.H = hero
+}
+
+func (s *Skill) IsSkillTargetValid() bool {
+	if s.SkillTargets[0] != s.RoomIDList[0] {
+		return false
+	}
+	return true
 }
