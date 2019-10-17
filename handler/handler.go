@@ -1,11 +1,11 @@
 package handler
 
 import (
-	"digimon/logger"
 	"fmt"
 	"github.com/Analyse4/digimon-cli/peer"
 	"github.com/Analyse4/digimon-cli/player"
 	"github.com/Analyse4/digimon-cli/room"
+	"github.com/Analyse4/digimon/logger"
 	"github.com/sirupsen/logrus"
 	"reflect"
 	"strings"
