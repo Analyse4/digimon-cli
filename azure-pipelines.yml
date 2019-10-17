@@ -44,4 +44,5 @@ steps:
       gitHubConnection: release
       repositoryName: Analyse4/digimon-cli
       isPreRelease: true
+      tagSource: 'Git tag'
       assets: $(Build.ArtifactStagingDirectory)/*
