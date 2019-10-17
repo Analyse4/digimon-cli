@@ -24,7 +24,7 @@ stages:
               mv !(gopath) '$(modulePath)'
               echo '##vso[task.prependpath]$(GOBIN)'
               echo '##vso[task.prependpath]$(GOROOT)/bin'
-          displayName: 'Set up the Go workspace'
+            displayName: 'Set up the Go workspace'
 
           - script: |
               go version
@@ -71,5 +71,5 @@ stages:
                 repositoryName: Analyse4/digimon-cli
                 isPreRelease: true
                 tagSource: 'manual'
-                tag: '1.0.0-alpha.6'
+                tag: '1.0.0-alpha.7'
                 assets: $(Build.ArtifactStagingDirectory)/*
