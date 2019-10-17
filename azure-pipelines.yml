@@ -41,7 +41,7 @@ steps:
   - task: GithubRelease@0
     displayName: 'Create GitHub Release'
     inputs:
-      gitHubConnection: Analyse4
+      gitHubConnection: release
       repositoryName: Analyse4/digimon-cli
       isPreRelease: true
       assets: $(Build.ArtifactStagingDirectory)/*
