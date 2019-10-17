@@ -63,7 +63,7 @@ stages:
 
   - stage: PubRelease
     jobs:
-      - job:
+      - job: Release
           steps:
           - task: GithubRelease@0
             displayName: 'Create GitHub Release'
@@ -72,5 +72,5 @@ stages:
               repositoryName: Analyse4/digimon-cli
               isPreRelease: true
               tagSource: 'manual'
-              tag: '1.0.0-alpha.9'
+              tag: '1.0.0-alpha.10'
               assets: $(Build.ArtifactStagingDirectory)/*
