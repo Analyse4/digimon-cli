@@ -1,6 +1,6 @@
 package handler
 
-import "digimon-cli/pbprotocol"
+import "github.com/Analyse4/digimon-cli/pbprotocol"
 
 func (dc *digimonCli) PlayerLeaveAck(ack *pbprotocol.PlayerLeaveAck) error {
 	if dc.room.Id != ack.RoomId {

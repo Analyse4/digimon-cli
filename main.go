@@ -15,7 +15,7 @@ limitations under the License.
 */
 package main
 
-import "digimon-cli/cmd"
+import "github.com/Analyse4/digimon-cli/cmd"
 
 func main() {
 	cmd.Execute()

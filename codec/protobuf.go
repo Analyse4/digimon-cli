@@ -1,8 +1,8 @@
 package codec
 
 import (
-	"digimon-cli/handler"
-	"digimon-cli/pbprotocol"
+	"github.com/Analyse4/digimon-cli/handler"
+	"github.com/Analyse4/digimon-cli/pbprotocol"
 	"github.com/Analyse4/digimon/logger"
 	"github.com/golang/protobuf/proto"
 	"github.com/sirupsen/logrus"

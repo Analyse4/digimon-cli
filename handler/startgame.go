@@ -1,10 +1,10 @@
 package handler
 
 import (
-	"digimon-cli/pbprotocol"
-	"digimon-cli/player"
-	"digimon-cli/tui"
 	"fmt"
+	"github.com/Analyse4/digimon-cli/pbprotocol"
+	"github.com/Analyse4/digimon-cli/player"
+	"github.com/Analyse4/digimon-cli/tui"
 )
 
 func (dc *digimonCli) StartGameAck(ack *pbprotocol.StartGameAck) error {

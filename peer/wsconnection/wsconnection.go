@@ -1,11 +1,11 @@
 package wsconnection
 
 import (
-	"digimon-cli/codec"
-	"digimon-cli/handler"
-	"digimon-cli/tui"
 	"digimon/logger"
 	"fmt"
+	"github.com/Analyse4/digimon-cli/codec"
+	"github.com/Analyse4/digimon-cli/handler"
+	"github.com/Analyse4/digimon-cli/tui"
 	"github.com/gorilla/websocket"
 	"github.com/sirupsen/logrus"
 	"net/url"

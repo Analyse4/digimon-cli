@@ -1,8 +1,8 @@
 package player
 
 import (
-	"digimon-cli/pbprotocol"
 	"fmt"
+	"github.com/Analyse4/digimon-cli/pbprotocol"
 )
 
 type Hero struct {

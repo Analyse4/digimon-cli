@@ -1,7 +1,7 @@
 package room
 
 import (
-	"digimon-cli/player"
+	"github.com/Analyse4/digimon-cli/player"
 )
 
 type Room struct {

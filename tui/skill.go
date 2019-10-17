@@ -1,9 +1,9 @@
 package tui
 
 import (
-	"digimon-cli/pbprotocol"
-	"digimon-cli/player"
 	"fmt"
+	"github.com/Analyse4/digimon-cli/pbprotocol"
+	"github.com/Analyse4/digimon-cli/player"
 	"github.com/sirupsen/logrus"
 )
 

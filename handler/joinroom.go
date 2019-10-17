@@ -1,11 +1,11 @@
 package handler
 
 import (
-	"digimon-cli/pbprotocol"
-	"digimon-cli/peer"
-	"digimon-cli/player"
-	"digimon-cli/tui"
 	"fmt"
+	"github.com/Analyse4/digimon-cli/pbprotocol"
+	"github.com/Analyse4/digimon-cli/peer"
+	"github.com/Analyse4/digimon-cli/player"
+	"github.com/Analyse4/digimon-cli/tui"
 	"os"
 )
 

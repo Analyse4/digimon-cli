@@ -1,8 +1,8 @@
 package handler
 
 import (
-	"digimon-cli/pbprotocol"
 	"fmt"
+	"github.com/Analyse4/digimon-cli/pbprotocol"
 )
 
 func (dc *digimonCli) EndGameAck(ack *pbprotocol.EndGameAck) error {

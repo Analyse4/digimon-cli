@@ -16,10 +16,10 @@ limitations under the License.
 package cmd
 
 import (
-	"digimon-cli/handler"
-	"digimon-cli/peer/wsconnection"
-	"digimon-cli/tui"
 	"fmt"
+	"github.com/Analyse4/digimon-cli/handler"
+	"github.com/Analyse4/digimon-cli/peer/wsconnection"
+	"github.com/Analyse4/digimon-cli/tui"
 	"github.com/Analyse4/digimon/logger"
 	"github.com/sirupsen/logrus"
 	"github.com/spf13/cobra"
