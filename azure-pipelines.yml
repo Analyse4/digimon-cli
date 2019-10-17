@@ -36,7 +36,7 @@ stages:
               go install -v
             workingDirectory: '$(modulePath)'
             displayName: 'Get dependencies, then build'
-          - publish: $(GOBIN))/digimon-cli
+          - publish: $(GOBIN)/digimon-cli
             artifact: LinuxBinary
 
   - stage: Package
@@ -73,5 +73,5 @@ stages:
               repositoryName: Analyse4/digimon-cli
               isPreRelease: true
               tagSource: 'manual'
-              tag: '1.0.0-alpha.11'
+              tag: '1.0.0-alpha.12'
               assets: $(Build.ArtifactStagingDirectory)/*
