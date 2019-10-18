@@ -24,12 +24,16 @@ stages:
               echo '##vso[task.prependpath]$(GOBIN)'
               echo '##vso[task.prependpath]$(GOROOT)/bin'
             displayName: 'Set up the Go workspace'
-          - task: Go@0
-            inputs:
-              command: 'custom' # Options: get, build, test, custom
-              customCommand: 'install'# Required when command == Custom
-              arguments: '-v'# Optional
-              workingDirectory: $modulePath
+          - bash: |
+              go version
+              go get -v -t -d ./...
+              if [ -f Gopkg.toml ]; then
+                  curl https://raw.githubusercontent.com/golang/dep/master/install.sh | sh
+                  dep ensure
+              fi
+              go install -v
+            workingDirectory: '$(modulePath)'
+            displayName: 'Get dependencies, then build'
           - publish: $(GOBIN)/*
             artifact: LinuxBinary
 
