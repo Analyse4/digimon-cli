@@ -14,7 +14,9 @@ stages:
           vmImage: windows-latest
         steps:
           - bash: |
-              echo $GOPATH
+              echo '$GOPATH'
+              echo -----------------
+              echo $GOBIN
               echo -----------------
               mkdir -p $GOBIN
               ls $GOPATH
