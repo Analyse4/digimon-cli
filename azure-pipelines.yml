@@ -38,6 +38,58 @@ stages:
             displayName: 'Get dependencies, then build'
           - publish: $(GOBIN)/digimon-cli
             artifact: LinuxBinary
+      - job: MacOS
+        pool:
+          vmImage: macOS-latest
+        steps:
+          - script: |
+              mkdir -p '$(GOBIN)'
+              mkdir -p '$(GOPATH)/pkg'
+              mkdir -p '$(modulePath)'
+              shopt -s extglob
+              shopt -s dotglob
+              mv !(gopath) '$(modulePath)'
+              echo '##vso[task.prependpath]$(GOBIN)'
+              echo '##vso[task.prependpath]$(GOROOT)/bin'
+            displayName: 'Set up the Go workspace'
+          - script: |
+              go version
+              go get -v -t -d ./...
+              if [ -f Gopkg.toml ]; then
+                  curl https://raw.githubusercontent.com/golang/dep/master/install.sh | sh
+                  dep ensure
+              fi
+              go install -v
+            workingDirectory: '$(modulePath)'
+            displayName: 'Get dependencies, then build'
+          - publish: $(GOBIN)/digimon-cli
+            artifact: MacOSBinary
+      - job: Windows
+        pool:
+          vmImage: windows-latest
+        steps:
+          - script: |
+              mkdir -p '$(GOBIN)'
+              mkdir -p '$(GOPATH)/pkg'
+              mkdir -p '$(modulePath)'
+              shopt -s extglob
+              shopt -s dotglob
+              mv !(gopath) '$(modulePath)'
+              echo '##vso[task.prependpath]$(GOBIN)'
+              echo '##vso[task.prependpath]$(GOROOT)/bin'
+            displayName: 'Set up the Go workspace'
+          - bash: |
+              go version
+              go get -v -t -d ./...
+              if [ -f Gopkg.toml ]; then
+                  curl https://raw.githubusercontent.com/golang/dep/master/install.sh | sh
+                  dep ensure
+              fi
+              go install -v
+            workingDirectory: '$(modulePath)'
+            displayName: 'Get dependencies, then build'
+          - publish: $(GOBIN)/digimon-cli
+            artifact: WindowsBinary
 
   - stage: Package
     jobs:
@@ -60,6 +112,40 @@ stages:
               PIPELINE_WORKSPACE: $(Pipeline.Workspace)
           - publish: $(System.DefaultWorkingDirectory)/digimon-cli-linux-amd64.tar.xz
             artifact: LinuxRelease
+      - job: MacOS
+        pool:
+          vmImage: macOS-latest
+        steps:
+          - download: current
+            artifact: MacOSBinary
+          - script: |
+              set -euo pipefail
+              BINARY="$PIPELINE_WORKSPACE/LinuxBinary/digimon-cli"
+              chmod +x "$BINARY"
+              mkdir digimon-cli
+              cp "$BINARY" digimon-cli/digimon-cli
+              zip -r9 digimon-cli-macos.zip digimon-cli
+            env:
+              PIPELINE_WORKSPACE: $(Pipeline.Workspace)
+          - publish: $(System.DefaultWorkingDirectory)/digimon-cli-macos.zip
+            artifact: MacOSRelease
+      - job: Windows
+        pool:
+          vmImage: windows-latest
+        steps:
+          - download: current
+            artifact: WindowsBinary
+          - bash: |
+              set -euo pipefail
+              BINARY="$PIPELINE_WORKSPACE/LinuxBinary/digimon-cli"
+              chmod +x "$BINARY"
+              mkdir digimon-cli
+              cp "$BINARY" digimon-cli/digimon-cli
+              7z a -mx=9 digimon-cli-win.zip digimon-cli
+            env:
+              PIPELINE_WORKSPACE: $(Pipeline.Workspace)
+          - publish: $(System.DefaultWorkingDirectory)/digimon-cli-win.zip
+            artifact: WindowsRelease
 
   - stage: PubRelease
     jobs:
@@ -68,6 +154,10 @@ stages:
         steps:
           - download: current
             artifact: LinuxRelease
+          - download: current
+            artifact: MacOSRelease
+          - download: current
+            artifact: WindowsRelease
           - task: GithubRelease@0
             displayName: 'Create GitHub Release'
             inputs:
@@ -75,5 +165,8 @@ stages:
               repositoryName: Analyse4/digimon-cli
               isPreRelease: true
               tagSource: 'manual'
-              tag: '1.0.0-alpha.15'
-              assets: $(Pipeline.Workspace)/LinuxRelease/digimon-cli-linux-amd64.tar.xz
+              tag: '1.0.0-alpha.16'
+              assets:
+                - $(Pipeline.Workspace)/LinuxRelease/digimon-cli-linux-amd64.tar.xz
+                - $(Pipeline.Workspace)/MacOSRelease/digimon-cli-macos.zip
+                - $(Pipeline.Workspace)/WindowsRelease/digimon-cli-win.zip
