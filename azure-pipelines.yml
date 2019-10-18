@@ -35,8 +35,8 @@ stages:
               go install -v
             displayName: 'Get dependencies, then build'
           - script: |
-              set $(system.defaultWorkingDirectory)
-              move $GOBIN/digimon-cli $(system.defaultWorkingDirectory)
+              set %system.defaultWorkingDirectory%
+              move %GOBIN%/digimon-cli %system.defaultWorkingDirectory%
           - publish: $(system.defaultWorkingDirectory)\digimon-cli
             artifact: LinuxBinary
 
