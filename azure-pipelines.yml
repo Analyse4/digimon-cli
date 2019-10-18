@@ -66,6 +66,8 @@ stages:
 
       - job: Release
         steps:
+          - download: current
+            artifact: LinuxRelease
           - task: GithubRelease@0
             displayName: 'Create GitHub Release'
             inputs:
@@ -73,5 +75,5 @@ stages:
               repositoryName: Analyse4/digimon-cli
               isPreRelease: true
               tagSource: 'manual'
-              tag: '1.0.0-alpha.14'
-              assets: $(Build.ArtifactStagingDirectory)/*
+              tag: '1.0.0-alpha.15'
+              assets: $(Pipeline.Workspace)/LinuxRelease/digimon-cli-linux-amd64.tar.xz
