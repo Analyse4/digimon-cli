@@ -38,7 +38,7 @@ stages:
 #          - script: |
 #              set %system.defaultWorkingDirectory%
 #              move %GOBIN%/digimon-cli %system.defaultWorkingDirectory%
-          - publish: $(System.DefaultWorkingDirectory)\digimon-cli
+          - publish: $(System.DefaultWorkingDirectory)/digimon-cli
             artifact: LinuxBinary
 
 #          - bash: |
