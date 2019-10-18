@@ -28,6 +28,7 @@ stages:
               ls ../../..
               ls ../..
             displayName: 'Set up the Go workspace'
+            workingDirectory: '$(modulePath)'
 
 #          - bash: |
 #              go version
