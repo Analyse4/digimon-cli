@@ -1,7 +1,7 @@
 trigger:
   - master
 variables:
-  GOPATH: 'C:\usr\gopath'
+  GOPATH: 'C:\\usr\\gopath'
   GOBIN:  '$(GOPATH)/bin' # Go binaries path
   modulePath: '$(GOPATH)/src/github.com/$(build.repository.name)' # Path to the module's code
 
