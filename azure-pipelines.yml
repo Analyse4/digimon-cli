@@ -24,22 +24,25 @@ stages:
               mv !(gopath) '$(modulePath)'
               echo '##vso[task.prependpath]$(GOBIN)'
               echo '##vso[task.prependpath]$(GOROOT)/bin'
+
+              ls ../../..
+              ls ../..
             displayName: 'Set up the Go workspace'
 
-          - bash: |
-              go version
-              go get -v -t -d ./...
-              if [ -f Gopkg.toml ]; then
-                  curl https://raw.githubusercontent.com/golang/dep/master/install.sh | sh
-                  dep ensure
-              fi
-              go install -v
-            workingDirectory: '$(modulePath)'
-          - bash: |
-              echo $(GOPATH)
-              echo $(GOBIN)
-              ls $(GOBIN)
-            displayName: 'testenv'
-            workingDirectory: '$(modulePath)'
-          - publish: $(GOBIN)/*
-            artifact: WindowsBinary
+#          - bash: |
+#              go version
+#              go get -v -t -d ./...
+#              if [ -f Gopkg.toml ]; then
+#                  curl https://raw.githubusercontent.com/golang/dep/master/install.sh | sh
+#                  dep ensure
+#              fi
+#              go install -v
+#            workingDirectory: '$(modulePath)'
+#          - bash: |
+#              echo $(GOPATH)
+#              echo $(GOBIN)
+#              ls $(GOBIN)
+#            displayName: 'testenv'
+#            workingDirectory: '$(modulePath)'
+#          - publish: $(GOBIN)/*
+#            artifact: WindowsBinary
