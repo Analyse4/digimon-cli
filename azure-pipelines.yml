@@ -27,8 +27,8 @@ stages:
             displayName: 'Get dependencies, then build'
           - publish: $(GOBIN)/digimon-cli-linux
             artifact: LinuxBinary
-          - publish: $(GOBIN)/digimon-cli-macos
-            artifact: MacOSBinary
+#          - publish: $(GOBIN)/digimon-cli-macos
+#            artifact: MacOSBinary
 #          - publish: $(GOBIN)/digimon-cli-win
 #            artifact: WindowsBinary
 ##      - job: MacOS
