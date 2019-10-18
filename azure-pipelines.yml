@@ -165,8 +165,8 @@ stages:
               repositoryName: Analyse4/digimon-cli
               isPreRelease: true
               tagSource: 'manual'
-              tag: '1.0.0-alpha.17'
-              assets:|
+              tag: '1.0.0-alpha.18'
+              assets: |
                    $(Pipeline.Workspace)/LinuxRelease/digimon-cli-linux-amd64.tar.xz
                    $(Pipeline.Workspace)/MacOSRelease/digimon-cli-macos.zip
                    $(Pipeline.Workspace)/WindowsRelease/digimon-cli-win.zip
