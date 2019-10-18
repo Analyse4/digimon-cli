@@ -23,22 +23,26 @@ stages:
               mv * $(modulePath)
               echo '##vso[task.prependpath]$(GOBIN)'
               echo '##vso[task.prependpath]$(GOROOT)/bin'
+
+              echo ----------------
+              cd $(GOPATH)
+              pwd
             displayName: 'Set up the Go workspace'
-          - bash: |
-              cd $(modulePath)
-              go version
-              go get -v -t -d ./...
-              if [ -f Gopkg.toml ]; then
-                  curl https://raw.githubusercontent.com/golang/dep/master/install.sh | sh
-                  dep ensure
-              fi
-              go install -v
-            displayName: 'Get dependencies, then build'
-#          - script: |
-#              set %system.defaultWorkingDirectory%
-#              move %GOBIN%/digimon-cli %system.defaultWorkingDirectory%
-          - publish: 'C:'
-            artifact: LinuxBinary
+#          - bash: |
+#              cd $(modulePath)
+#              go version
+#              go get -v -t -d ./...
+#              if [ -f Gopkg.toml ]; then
+#                  curl https://raw.githubusercontent.com/golang/dep/master/install.sh | sh
+#                  dep ensure
+#              fi
+#              go install -v
+#            displayName: 'Get dependencies, then build'
+##          - script: |
+##              set %system.defaultWorkingDirectory%
+##              move %GOBIN%/digimon-cli %system.defaultWorkingDirectory%
+#          - publish: 'C:'
+#            artifact: LinuxBinary
 
 #          - bash: |
 #              go version
