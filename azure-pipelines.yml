@@ -14,9 +14,9 @@ stages:
           vmImage: windows-latest
         steps:
           - script: |
-              set '%(GOPATH)%'
-              md -p '%(GOBIN)%'
-              dir '%(GOBIN)%'
+              set %(GOPATH)%
+              md -p %(GOBIN)%
+              dir %(GOPATH)%
             displayName: 'Set up the Go workspace'
             workingDirectory: $(system.defaultWorkingDirectory)
 
