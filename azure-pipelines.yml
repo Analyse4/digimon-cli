@@ -1,8 +1,8 @@
 trigger:
   - master
 variables:
-  GOBIN:  '$(GOPATH)/bin' # Go binaries path
-  modulePath: '$(GOPATH)/src/github.com/$(build.repository.name)' # Path to the module's code
+  GOBIN:  '%GOPATH%\\bin' # Go binaries path
+#  modulePath: '$(GOPATH)/src/github.com/$(build.repository.name)' # Path to the module's code
 
 stages:
 
@@ -14,7 +14,7 @@ stages:
           vmImage: windows-latest
         steps:
           - script: |
-              set %(GOPATH)%
+              set GOPATH
               md -p %(GOBIN)%
               dir %(GOPATH)%
             displayName: 'Set up the Go workspace'
