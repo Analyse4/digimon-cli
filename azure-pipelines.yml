@@ -25,8 +25,7 @@ stages:
               echo '##vso[task.prependpath]$(GOBIN)'
               echo '##vso[task.prependpath]$(GOROOT)/bin'
 
-              ls ../../..
-              ls ../..
+              pwd
             displayName: 'Set up the Go workspace'
             workingDirectory: '$(modulePath)'
 
