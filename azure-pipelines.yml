@@ -34,7 +34,7 @@ stages:
               fi
               go install -v
             displayName: 'Get dependencies, then build'
-          - publish: '/usr/gopath/bin/digimon-cli'
+          - publish: /usr/gopath/bin/digimon-cli
             artifact: LinuxBinary
 
 #          - bash: |
