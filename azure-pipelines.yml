@@ -16,4 +16,4 @@ stages:
           vmImage: macOS-latest
         steps:
           - script: |
-              echo /usr/local
+              ls /usr/local
