@@ -13,14 +13,10 @@ stages:
         pool:
           vmImage: windows-latest
         steps:
-          - bash: |
-              mkdir -p '$(GOBIN)'
-              mkdir -p '$(GOPATH)/pkg'
-              mkdir -p '$(modulePath)'
-
-              echo $(GOPATH)
-              ls $(GOPATH)
-              ls $(GOBIN)
+          - script: |
+              set '%(GOPATH)%'
+              md -p '%(GOBIN)%'
+              dir '%(GOBIN)%'
             displayName: 'Set up the Go workspace'
             workingDirectory: $(system.defaultWorkingDirectory)
 
