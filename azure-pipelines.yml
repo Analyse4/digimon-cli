@@ -15,7 +15,7 @@ stages:
         steps:
           - script: |
               set (GOPATH)
-              md %(GOBIN)%
+              mkdir -p %(GOBIN)%
               dir %(GOPATH)%
             displayName: 'Set up the Go workspace'
             workingDirectory: $(system.defaultWorkingDirectory)
