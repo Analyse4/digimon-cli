@@ -3,7 +3,7 @@ trigger:
 variables:
   GOPATH: '$(system.defaultWorkingDirectory)/gopath'
   GOBIN:  '$(GOPATH)/bin' # Go binaries path
-#  modulePath: '$(GOPATH)/src/github.com/$(build.repository.name)' # Path to the module's code
+  modulePath: '$(GOPATH)/src/github.com/$(build.repository.name)' # Path to the module's code
 
 stages:
 
@@ -15,15 +15,24 @@ stages:
           vmImage: windows-latest
         steps:
           - bash: |
-              echo $GOPATH
-              mkdir -p $GOPATH
-              echo -----------------
-              echo $GOBIN
-              echo -----------------
-              mkdir -p $GOBIN
-              ls $GOPATH
+              mkdir -p $(GOBIN)
+              mkdir -p $(GOPATH)/pkg
+              mkdir -p $(modulePath)
+              shopt -s extglob
+              shopt -s dotglob
+              mv !(gopath) $(modulePath)
+              echo '##vso[task.prependpath]$(GOBIN)'
+              echo '##vso[task.prependpath]$(GOROOT)/bin'
+              displayName: 'Set up the Go workspace'
             displayName: 'Set up the Go workspace'
-            workingDirectory: $(system.defaultWorkingDirectory)
+          - task: Go@0
+            inputs:
+              command: 'custom' # Options: get, build, test, custom
+              customCommand: 'install'# Required when command == Custom
+              arguments: '-v'# Optional
+              workingDirectory: $modulePath
+          - publish: $(GOBIN)/*
+            artifact: LinuxBinary
 
 #          - bash: |
 #              go version
