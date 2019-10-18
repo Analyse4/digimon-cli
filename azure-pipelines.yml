@@ -15,5 +15,5 @@ stages:
         pool:
           vmImage: macOS-latest
         steps:
-          - scripts: |
+          - script: |
               echo $(GOROOT)
