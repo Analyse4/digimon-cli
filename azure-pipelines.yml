@@ -16,4 +16,4 @@ stages:
           vmImage: windows-latest
         steps:
           - bash: |
-              ls C:
+              ls 'C:'
