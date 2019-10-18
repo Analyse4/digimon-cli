@@ -25,6 +25,7 @@ stages:
               echo '##vso[task.prependpath]$(GOROOT)/bin'
 
               echo $(GOPATH)
+              ls $(GOPATH)
             displayName: 'Set up the Go workspace'
 #          - bash: |
 #              cd $(modulePath)
