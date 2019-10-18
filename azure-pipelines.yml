@@ -33,12 +33,11 @@ stages:
                   dep ensure
               fi
               go install -v
-              mv $(GOBIN)/digimon-cli $(System.DefaultWorkingDirectory)
             displayName: 'Get dependencies, then build'
 #          - script: |
 #              set %system.defaultWorkingDirectory%
 #              move %GOBIN%/digimon-cli %system.defaultWorkingDirectory%
-          - publish: $(System.DefaultWorkingDirectory)/digimon-cli
+          - publish: C:\usr\gopath\bin\
             artifact: LinuxBinary
 
 #          - bash: |
