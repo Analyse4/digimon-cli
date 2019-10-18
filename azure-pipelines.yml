@@ -14,10 +14,10 @@ stages:
           vmImage: windows-latest
         steps:
           - bash: |
-              echo $(GOPATH)
+              echo $GOPATH
               echo -----------------
-              mkdir -p (GOBIN)
-              ls $(GOPATH)
+              mkdir -p $GOBIN
+              ls $GOPATH
             displayName: 'Set up the Go workspace'
             workingDirectory: $(system.defaultWorkingDirectory)
 
