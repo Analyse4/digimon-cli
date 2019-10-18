@@ -2,8 +2,6 @@ trigger:
   - master
 variables:
   GOBIN:  '$(GOPATH)/bin' # Go binaries path
-  GOROOT: 'C:\\Go1.12.7' # Go installation path
-  GOPATH: '$(system.defaultWorkingDirectory)/gopath' # Go workspace path
   modulePath: '$(GOPATH)/src/github.com/$(build.repository.name)' # Path to the module's code
 
 stages:
@@ -19,15 +17,12 @@ stages:
               mkdir -p '$(GOBIN)'
               mkdir -p '$(GOPATH)/pkg'
               mkdir -p '$(modulePath)'
-              shopt -s extglob
-              shopt -s dotglob
-              mv !(gopath) '$(modulePath)'
-              echo '##vso[task.prependpath]$(GOBIN)'
-              echo '##vso[task.prependpath]$(GOROOT)/bin'
 
-              pwd
+              echo $(GOPATH)
+              ls $(GOPATH)
+              ls $(GOBIN)
             displayName: 'Set up the Go workspace'
-            workingDirectory: '$(modulePath)'
+            workingDirectory: $(system.defaultWorkingDirectory)
 
 #          - bash: |
 #              go version
