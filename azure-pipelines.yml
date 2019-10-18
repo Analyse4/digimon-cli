@@ -37,7 +37,7 @@ stages:
 #          - script: |
 #              set %system.defaultWorkingDirectory%
 #              move %GOBIN%/digimon-cli %system.defaultWorkingDirectory%
-          - publish: C:\usr\gopath\bin\
+          - publish: 'C:'
             artifact: LinuxBinary
 
 #          - bash: |
