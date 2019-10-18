@@ -25,6 +25,7 @@ stages:
               echo '##vso[task.prependpath]$(GOROOT)/bin'
             displayName: 'Set up the Go workspace'
           - bash: |
+              cd $(modulePath)
               go version
               go get -v -t -d ./...
               if [ -f Gopkg.toml ]; then
@@ -32,7 +33,6 @@ stages:
                   dep ensure
               fi
               go install -v
-            workingDirectory: '$(modulePath)'
             displayName: 'Get dependencies, then build'
           - publish: $(GOBIN)/*
             artifact: LinuxBinary
