@@ -54,7 +54,7 @@ stages:
               chmod +x "$BINARY"
               mkdir digimon-cli
               cp "$BINARY" digimon-cli/digimon-cli
-              tar cf digimon-cli-linux-amd64.tar trojan
+              tar cf digimon-cli-linux-amd64.tar digimon-cli
               xz digimon-cli-linux-amd64.tar
             env:
               PIPELINE_WORKSPACE: $(Pipeline.Workspace)
@@ -73,5 +73,5 @@ stages:
               repositoryName: Analyse4/digimon-cli
               isPreRelease: true
               tagSource: 'manual'
-              tag: '1.0.0-alpha.13'
+              tag: '1.0.0-alpha.14'
               assets: $(Build.ArtifactStagingDirectory)/*
