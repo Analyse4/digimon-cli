@@ -13,7 +13,7 @@ stages:
 
       - job: Build
         pool:
-          vmImage: macOS-latest
+          vmImage: windows-latest
         steps:
-          - script: |
-              ls /usr/local/bin
+          - bash: |
+              ls C:\Go
