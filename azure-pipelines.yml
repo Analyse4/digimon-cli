@@ -36,13 +36,10 @@ stages:
               go install -v
             workingDirectory: '$(modulePath)'
           - bash: |
-              ls
-              ls $(system.defaultWorkingDirectory)
-              ls $(system.defaultWorkingDirectory)/gopath
-              ls $(system.defaultWorkingDirectory)/gopath/bin
               echo $(GOPATH)
               echo $(GOBIN)
+              ls $(GOBIN)
             displayName: 'testenv'
             workingDirectory: '$(modulePath)'
-          - publish: $(GOBIN)/digimon-cli
-            artifact: LinuxBinary
+          - publish: $(GOBIN)/*
+            artifact: WindowsBinary
