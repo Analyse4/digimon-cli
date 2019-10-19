@@ -1,9 +1,9 @@
 trigger:
   - master
-variables:
-  GOPATH: 'C:\\usr\\gopath'
-  GOBIN:  '$(GOPATH)/bin' # Go binaries path
-  modulePath: '$(GOPATH)/src/github.com/$(build.repository.name)' # Path to the module's code
+#variables:
+#  GOPATH: 'C:\\usr\\gopath'
+#  GOBIN:  '$(GOPATH)/bin' # Go binaries path
+#  modulePath: '$(GOPATH)/src/github.com/$(build.repository.name)' # Path to the module's code
 
 stages:
 
@@ -15,12 +15,18 @@ stages:
           vmImage: windows-latest
         steps:
           - bash: |
+              echo "##vso[task.setvariable variable=gopath]C:\\usr\\gopath"
+          - bash: |
+              echo "##vso[task.setvariable variable=gobin]$(GOPATH)/bin"
+          - bash: |
+              echo "##vso[task.setvariable variable=modulepath]$(GOPATH)/src/github.com/$(build.repository.name)"
+          - bash: |
               mkdir -p $(GOBIN)
               mkdir -p $(GOPATH)/pkg
-              mkdir -p $(modulePath)
+              mkdir -p $(MODULEPATH)
               shopt -s extglob
               shopt -s dotglob
-              mv * $(modulePath)
+              mv * $(MODULEPATH)
               echo '##vso[task.prependpath]$(GOBIN)'
               echo '##vso[task.prependpath]$(GOROOT)/bin'
 
@@ -28,7 +34,7 @@ stages:
               ls $(GOPATH)
             displayName: 'Set up the Go workspace'
           - bash: |
-              cd $(modulePath)
+              cd $(MODULEPATH)
               go version
               go get -v -t -d ./...
               if [ -f Gopkg.toml ]; then
