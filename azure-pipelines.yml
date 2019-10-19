@@ -110,23 +110,22 @@ stages:
 #          - publish: $(GOBIN)
 #            artifact: WindowsBinary
   - stage: Package
-      jobs:
-
-        - job: Linux
-          pool:
-            vmImage: ubuntu-latest
-          steps:
-            - download: current
-              artifact: LinuxBinary
-            - script: |
-                set -euo pipefail
-                BINARY="$PIPELINE_WORKSPACE/LinuxBinary/digimon-cli"
-                chmod +x "$BINARY"
-                mkdir digimon-cli
-                cp "$BINARY" digimon-cli/digimon-cli
-                tar cf digimon-cli-linux-amd64.tar digimon-cli
-                xz digimon-cli-linux-amd64.tar
-              env:
-                PIPELINE_WORKSPACE: $(Pipeline.Workspace)
-            - publish: $(system.defaultWorkingDirectory)/digimon-cli-linux-amd64.tar.xz
-              artifact: LinuxRelease
+    jobs:
+      - job: Linux
+        pool:
+          vmImage: ubuntu-latest
+        steps:
+          - download: current
+            artifact: LinuxBinary
+          - script: |
+              set -euo pipefail
+              BINARY="$PIPELINE_WORKSPACE/LinuxBinary/digimon-cli"
+              chmod +x "$BINARY"
+              mkdir digimon-cli
+              cp "$BINARY" digimon-cli/digimon-cli
+              tar cf digimon-cli-linux-amd64.tar digimon-cli
+              xz digimon-cli-linux-amd64.tar
+            env:
+              PIPELINE_WORKSPACE: $(Pipeline.Workspace)
+          - publish: $(system.defaultWorkingDirectory)/digimon-cli-linux-amd64.tar.xz
+            artifact: LinuxRelease
