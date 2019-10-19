@@ -180,8 +180,8 @@ stages:
               gitHubConnection: release
               repositoryName: Analyse4/digimon-cli
               isPreRelease: true
-              tagSource: 'manual'
-              tag: '1.0.0-alpha.20'
+#              tagSource: 'manual'
+#              tag: '1.0.0-alpha.20'
               assets: |
                 $(Pipeline.Workspace)/LinuxRelease/digimon-cli-linux-amd64.tar.xz
                 $(Pipeline.Workspace)/MacOSRelease/digimon-cli-darwin-amd64.zip
