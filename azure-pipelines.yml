@@ -42,38 +42,38 @@ stages:
             displayName: 'Get dependencies, then build'
           - publish: $(GOBIN)
             artifact: LinuxBinary
-#      - job: MacOS
-#        pool:
-#          vmImage: macOS-latest
-#        steps:
-#          - bash: |
-#              echo "##vso[task.setvariable variable=gopath]$(system.defaultWorkingDirectory)/gopath"
-#          - bash: |
-#              echo "##vso[task.setvariable variable=gobin]$(GOPATH)/bin"
-#          - bash: |
-#              echo "##vso[task.setvariable variable=modulepath]$(GOPATH)/src/github.com/$(build.repository.name)"
-#          - script: |
-#              mkdir -p $(GOBIN)
-#              mkdir -p $(GOPATH)/pkg
-#              mkdir -p $(MODULEPATH)
-#              shopt -s extglob
-#              shopt -s dotglob
-#              mv !(gopath) $(MODULEPATH)
-#              echo '##vso[task.prependpath]$(GOBIN)'
-#              echo '##vso[task.prependpath]$(GOROOT)/bin'
-#            displayName: 'Set up the Go workspace'
-#          - script: |
-#              go version
-#              go get -v -t -d ./...
-#              if [ -f Gopkg.toml ]; then
-#                  curl https://raw.githubusercontent.com/golang/dep/master/install.sh | sh
-#                  dep ensure
-#              fi
-#              go install -v
-#            workingDirectory: '$(MODULEPATH)'
-#            displayName: 'Get dependencies, then build'
-#          - publish: $(GOBIN)
-#            artifact: MacOSBinary
+      - job: MacOS
+        pool:
+          vmImage: macOS-latest
+        steps:
+          - bash: |
+              echo "##vso[task.setvariable variable=gopath]$(system.defaultWorkingDirectory)/gopath"
+          - bash: |
+              echo "##vso[task.setvariable variable=gobin]$(GOPATH)/bin"
+          - bash: |
+              echo "##vso[task.setvariable variable=modulepath]$(GOPATH)/src/github.com/$(build.repository.name)"
+          - script: |
+              mkdir -p $(GOBIN)
+              mkdir -p $(GOPATH)/pkg
+              mkdir -p $(MODULEPATH)
+              shopt -s extglob
+              shopt -s dotglob
+              mv !(gopath) $(MODULEPATH)
+              echo '##vso[task.prependpath]$(GOBIN)'
+              echo '##vso[task.prependpath]$(GOROOT)/bin'
+            displayName: 'Set up the Go workspace'
+          - script: |
+              go version
+              go get -v -t -d ./...
+              if [ -f Gopkg.toml ]; then
+                  curl https://raw.githubusercontent.com/golang/dep/master/install.sh | sh
+                  dep ensure
+              fi
+              go install -v
+            workingDirectory: '$(MODULEPATH)'
+            displayName: 'Get dependencies, then build'
+          - publish: $(GOBIN)
+            artifact: MacOSBinary
 #      - job: Windows
 #        pool:
 #          vmImage: windows-latest
@@ -129,3 +129,20 @@ stages:
               PIPELINE_WORKSPACE: $(Pipeline.Workspace)
           - publish: $(system.defaultWorkingDirectory)/digimon-cli-linux-amd64.tar.xz
             artifact: LinuxRelease
+      - job: MacOS
+        pool:
+          vmImage: macOS-latest
+        steps:
+          - download: current
+            artifact: MacOSBinary
+          - script: |
+              set -euo pipefail
+              BINARY="$PIPELINE_WORKSPACE/MacOSBinary/digimon-cli"
+              chmod +x "$BINARY"
+              mkdir digimon-cli
+              cp "$BINARY" digimon-cli/digimon-cli
+              zip -r9 digimon-cli-macos.zip digimon-cli
+            env:
+              PIPELINE_WORKSPACE: $(Pipeline.Workspace)
+          - publish: $(system.defaultWorkingDirectory)/digimon-cli-macos.zip
+            artifact: MacOSRelease
