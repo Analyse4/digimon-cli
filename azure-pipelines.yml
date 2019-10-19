@@ -152,7 +152,7 @@ stages:
         steps:
           - download: current
             artifact: WindowsBinary
-          - script: |
+          - bash: |
               set -euo pipefail
               BINARY="$PIPELINE_WORKSPACE/WindowsBinary/digimon-cli"
               chmod +x "$BINARY"
