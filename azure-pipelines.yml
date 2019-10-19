@@ -141,10 +141,10 @@ stages:
               chmod +x "$BINARY"
               mkdir digimon-cli
               cp "$BINARY" digimon-cli/digimon-cli
-              zip -r9 digimon-cli-macos.zip digimon-cli
+              zip -r9 digimon-cli-darwin-amd64.zip digimon-cli
             env:
               PIPELINE_WORKSPACE: $(Pipeline.Workspace)
-          - publish: $(system.defaultWorkingDirectory)/digimon-cli-macos.zip
+          - publish: $(system.defaultWorkingDirectory)/digimon-cli-darwin-amd64.zip
             artifact: MacOSRelease
       - job: Windows
         pool:
@@ -158,8 +158,31 @@ stages:
               chmod +x "$BINARY"
               mkdir digimon-cli
               cp "$BINARY" digimon-cli/
-              7z a -mx=9 digimon-cli-win.zip digimon-cli
+              7z a -mx=9 digimon-cli-win-amd64.zip digimon-cli
             env:
               PIPELINE_WORKSPACE: $(Pipeline.Workspace)
-          - publish: $(system.defaultWorkingDirectory)/digimon-cli-win.zip
+          - publish: $(system.defaultWorkingDirectory)/digimon-cli-win-amd64.zip
             artifact: WindowsRelease
+  - stage: PubRelease
+    jobs:
+
+      - job: Release
+        steps:
+          - download: current
+            artifact: LinuxRelease
+          - download: current
+            artifact: MacOSRelease
+          - download: current
+            artifact: WindowsRelease
+          - task: GithubRelease@0
+            displayName: 'Create GitHub Release'
+            inputs:
+              gitHubConnection: release
+              repositoryName: Analyse4/digimon-cli
+              isPreRelease: true
+              tagSource: 'manual'
+              tag: '1.0.0-alpha.20'
+              assets: |
+                $(Pipeline.Workspace)/LinuxRelease/digimon-cli-linux-amd64.tar.xz
+                $(Pipeline.Workspace)/MacOSRelease/digimon-cli-darwin-amd64.zip
+                $(Pipeline.Workspace)/WindowsRelease/digimon-cli-win-amd64.zip
