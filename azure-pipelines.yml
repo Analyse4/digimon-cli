@@ -42,91 +42,70 @@ stages:
             displayName: 'Get dependencies, then build'
           - publish: $(GOBIN)
             artifact: LinuxBinary
-#      - job: MacOS
-#        pool:
-#          vmImage: macOS-latest
-#        steps:
-#          - bash: |
-#              echo "##vso[task.setvariable variable=gopath]/usr/gopath"
-#          - bash: |
-#              echo "##vso[task.setvariable variable=gobin]$(GOPATH)/bin"
-#          - bash: |
-#              echo "##vso[task.setvariable variable=modulepath]$(GOPATH)/src/github.com/$(build.repository.name)"
-#          - script: |
-#              mkdir -p $(GOBIN)
-#              mkdir -p $(GOPATH)/pkg
-#              mkdir -p $(MODULEPATH)
-#              shopt -s extglob
-#              shopt -s dotglob
-#              mv * $(MODULEPATH)
-#              echo '##vso[task.prependpath]$(GOBIN)'
-#              echo '##vso[task.prependpath]$(GOROOT)/bin'
-#            displayName: 'Set up the Go workspace'
-#          - script: |
-#              go version
-#              go get -v -t -d ./...
-#              if [ -f Gopkg.toml ]; then
-#                  curl https://raw.githubusercontent.com/golang/dep/master/install.sh | sh
-#                  dep ensure
-#              fi
-#              go install -v
-#            workingDirectory: '$(MODULEPATH)'
-#            displayName: 'Get dependencies, then build'
-#          - publish: $(GOBIN)
-#            artifact: MacOSBinary
-#      - job: Windows
-#        pool:
-#          vmImage: windows-latest
-#        steps:
-#          - bash: |
-#              echo "##vso[task.setvariable variable=gopath]C:\\usr\\gopath"
-#          - bash: |
-#              echo "##vso[task.setvariable variable=gobin]$(GOPATH)/bin"
-#          - bash: |
-#              echo "##vso[task.setvariable variable=modulepath]$(GOPATH)/src/github.com/$(build.repository.name)"
-#          - bash: |
-#              mkdir -p $(GOBIN)
-#              mkdir -p $(GOPATH)/pkg
-#              mkdir -p $(MODULEPATH)
-#              shopt -s extglob
-#              shopt -s dotglob
-#              mv * $(MODULEPATH)
-#              echo '##vso[task.prependpath]$(GOBIN)'
-#              echo '##vso[task.prependpath]$(GOROOT)/bin'
-#
-#              echo $(GOPATH)
-#              ls $(GOPATH)
-#            displayName: 'Set up the Go workspace'
-#          - bash: |
-#              cd $(MODULEPATH)
-#              go version
-#              go get -v -t -d ./...
-#              if [ -f Gopkg.toml ]; then
-#                  curl https://raw.githubusercontent.com/golang/dep/master/install.sh | sh
-#                  dep ensure
-#              fi
-#              go install -v
-#            displayName: 'Get dependencies, then build'
-##          - script: |
-##              set %system.defaultWorkingDirectory%
-##              move %GOBIN%/digimon-cli %system.defaultWorkingDirectory%
-#          - publish: $(GOBIN)
-#            artifact: WindowsBinary
+      - job: MacOS
+        pool:
+          vmImage: macOS-latest
+        steps:
+          - bash: |
+              echo "##vso[task.setvariable variable=gopath]$(system.defaultWorkingDirectory)/gopath"
+          - bash: |
+              echo "##vso[task.setvariable variable=gobin]$(GOPATH)/bin"
+          - bash: |
+              echo "##vso[task.setvariable variable=modulepath]$(GOPATH)/src/github.com/$(build.repository.name)"
+          - script: |
+              mkdir -p $(GOBIN)
+              mkdir -p $(GOPATH)/pkg
+              mkdir -p $(MODULEPATH)
+              shopt -s extglob
+              shopt -s dotglob
+              mv !(gopath) $(MODULEPATH)
+              echo '##vso[task.prependpath]$(GOBIN)'
+              echo '##vso[task.prependpath]$(GOROOT)/bin'
+            displayName: 'Set up the Go workspace'
+          - script: |
+              go version
+              go get -v -t -d ./...
+              if [ -f Gopkg.toml ]; then
+                  curl https://raw.githubusercontent.com/golang/dep/master/install.sh | sh
+                  dep ensure
+              fi
+              go install -v
+            workingDirectory: '$(MODULEPATH)'
+            displayName: 'Get dependencies, then build'
+          - publish: $(GOBIN)
+            artifact: MacOSBinary
+      - job: Windows
+        pool:
+          vmImage: windows-latest
+        steps:
+          - bash: |
+              echo "##vso[task.setvariable variable=gopath]C:\\usr\\gopath"
+          - bash: |
+              echo "##vso[task.setvariable variable=gobin]$(GOPATH)/bin"
+          - bash: |
+              echo "##vso[task.setvariable variable=modulepath]$(GOPATH)/src/github.com/$(build.repository.name)"
+          - bash: |
+              mkdir -p $(GOBIN)
+              mkdir -p $(GOPATH)/pkg
+              mkdir -p $(MODULEPATH)
+              shopt -s extglob
+              shopt -s dotglob
+              mv * $(MODULEPATH)
+              echo '##vso[task.prependpath]$(GOBIN)'
+              echo '##vso[task.prependpath]$(GOROOT)/bin'
 
-#          - bash: |
-#              go version
-#              go get -v -t -d ./...
-#              if [ -f Gopkg.toml ]; then
-#                  curl https://raw.githubusercontent.com/golang/dep/master/install.sh | sh
-#                  dep ensure
-#              fi
-#              go install -v
-#            workingDirectory: '$(modulePath)'
-#          - bash: |
-#              echo $(GOPATH)
-#              echo $(GOBIN)
-#              ls $(GOBIN)
-#            displayName: 'testenv'
-#            workingDirectory: '$(modulePath)'
-#          - publish: $(GOBIN)/*
-#            artifact: WindowsBinary
+              echo $(GOPATH)
+              ls $(GOPATH)
+            displayName: 'Set up the Go workspace'
+          - bash: |
+              cd $(MODULEPATH)
+              go version
+              go get -v -t -d ./...
+              if [ -f Gopkg.toml ]; then
+                  curl https://raw.githubusercontent.com/golang/dep/master/install.sh | sh
+                  dep ensure
+              fi
+              go install -v
+            displayName: 'Get dependencies, then build'
+          - publish: $(GOBIN)
+            artifact: WindowsBinary
