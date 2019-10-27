@@ -35,24 +35,24 @@ func (s *Skill) Show() {
 	}
 	switch s.H.SkillPoint {
 	case 0:
-		fmt.Println("please chose Power Up or Defence or Escape or Quit, input number only")
+		fmt.Println("please choose Power Up or Defence or Escape or Quit, input number only")
 		fmt.Println("1.Power Up		2.Defence		3.Escape		4.Quit")
 		fmt.Scan(&s.result)
 	case 1:
-		fmt.Println("please chose Power Up or Defence or Escape or Quit or Attack, input number only")
+		fmt.Println("please choose Power Up or Defence or Escape or Quit or Attack, input number only")
 		fmt.Println("1.Power Up		2.Defence		3.Escape		4.Quit		5.Attack")
 		fmt.Scan(&s.result)
 	default:
 		if s.H.IdentityLevel == CHAMPION && s.H.SkillPoint < 3 {
-			fmt.Println("please chose Power Up or Defence or Escape or Quit or Attack, input number only")
+			fmt.Println("please choose Power Up or Defence or Escape or Quit or Attack, input number only")
 			fmt.Println("1.Power Up		2.Defence		3.Escape		4.Quit		5.Attack")
 			fmt.Scan(&s.result)
 		} else if s.H.Identity == pbprotocol.DigimonIdentity_WEREGARURUMON || s.H.Identity == pbprotocol.DigimonIdentity_SKULLGREYMON {
-			fmt.Println("please chose Power Up or Defence or Escape or Quit or Attack, input number only")
+			fmt.Println("please choose Power Up or Defence or Escape or Quit or Attack, input number only")
 			fmt.Println("1.Power Up		2.Defence		3.Escape		4.Quit		5.Attack")
 			fmt.Scan(&s.result)
 		} else {
-			fmt.Println("please chose Power Up or Defence or Escape or Quit or Attack or Evolve, input number only")
+			fmt.Println("please choose Power Up or Defence or Escape or Quit or Attack or Evolve, input number only")
 			fmt.Println("1.Power Up		2.Defence		3.Escape		4.Quit		5.Attack		6.Evolve")
 			fmt.Scan(&s.result)
 		}
@@ -64,14 +64,14 @@ func (s *Skill) ShowLevel() {
 	case s.ATTACK:
 		if s.H.Identity == pbprotocol.DigimonIdentity_TOGEMON || s.H.Identity == pbprotocol.DigimonIdentity_ANGEMON || s.H.Identity == pbprotocol.DigimonIdentity_LILLYMON || s.H.Identity == pbprotocol.DigimonIdentity_ZUDOMON || s.H.Identity == pbprotocol.DigimonIdentity_GARUDAMON || s.H.Identity == pbprotocol.DigimonIdentity_MAGNAANGEMON || s.H.Identity == pbprotocol.DigimonIdentity_WEREGARURUMON || s.H.Identity == pbprotocol.DigimonIdentity_SKULLGREYMON || s.H.Identity == pbprotocol.DigimonIdentity_ANGEWOMON || s.H.Identity == pbprotocol.DigimonIdentity_WARGREYMON || s.H.Identity == pbprotocol.DigimonIdentity_METALGARURUMON {
 			if s.H.SkillPoint >= 5 && (s.H.Identity == pbprotocol.DigimonIdentity_WARGREYMON || s.H.Identity == pbprotocol.DigimonIdentity_METALGARURUMON) {
-				fmt.Println("please chose attack level, input number only")
+				fmt.Println("please choose attack level, input number only")
 				fmt.Println("1.one		2.two		3.five")
 				fmt.Scan(&s.result)
 				if s.result == 3 {
 					s.result = s.result + 2
 				}
 			} else {
-				fmt.Println("please chose attack level, input number only")
+				fmt.Println("please choose attack level, input number only")
 				fmt.Println("1.one		2.two")
 				fmt.Scan(&s.result)
 			}
@@ -79,36 +79,36 @@ func (s *Skill) ShowLevel() {
 			s.result = 1
 		}
 	case s.DEFENCE:
-		fmt.Println("please chose defence level, input number only")
+		fmt.Println("please choose defence level, input number only")
 		fmt.Println("1.one		2.two		3.three		4.four")
 		fmt.Scan(&s.result)
 	case s.EVOLVE:
 		if s.H.IdentityLevel == ROOKIE {
 			if s.H.SkillPoint >= 5 && (s.H.Identity == pbprotocol.DigimonIdentity_AGUMON || s.H.Identity == pbprotocol.DigimonIdentity_GABUMON) {
-				fmt.Println("please chose evolve type, input number only")
+				fmt.Println("please choose evolve type, input number only")
 				fmt.Println("1.evolve		2.mega-evolve")
 				fmt.Scan(&s.result)
 				if s.result == 2 {
 					s.result++
 				}
 			} else {
-				fmt.Println("please chose evolve type, input number only")
+				fmt.Println("please choose evolve type, input number only")
 				fmt.Println("1.evolve")
 				fmt.Scan(&s.result)
 			}
 		} else if s.H.IdentityLevel == CHAMPION && s.H.SkillPoint >= 3 {
 			if s.H.SkillPoint >= 5 && (s.H.Identity == pbprotocol.DigimonIdentity_GREYMON || s.H.Identity == pbprotocol.DigimonIdentity_GARURUMON) {
-				fmt.Println("please chose evolve type, input number only")
+				fmt.Println("please choose evolve type, input number only")
 				fmt.Println("1.super-evolve		2.mega-evolve")
 				fmt.Scan(&s.result)
 			} else {
-				fmt.Println("please chose evolve type, input number only")
+				fmt.Println("please choose evolve type, input number only")
 				fmt.Println("1.super-evolve")
 				fmt.Scan(&s.result)
 			}
 			s.result++
 		} else if s.H.IdentityLevel == ULTIMATE && s.H.SkillPoint >= 5 && (s.H.Identity == pbprotocol.DigimonIdentity_SKULLGREYMON || s.H.Identity == pbprotocol.DigimonIdentity_WEREGARURUMON) {
-			fmt.Println("please chose evolve type, input number only")
+			fmt.Println("please choose evolve type, input number only")
 			fmt.Println("1.mega-evolve")
 			fmt.Scan(&s.result)
 			s.result += 2

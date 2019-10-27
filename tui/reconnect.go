@@ -9,7 +9,7 @@ type ReconnectTUI struct {
 }
 
 func (l *ReconnectTUI) Show() {
-	fmt.Println("Encounter service issues, please chose Reconnect or Quit, input number only")
+	fmt.Println("Encounter service issues, please choose Reconnect or Quit, input number only")
 	fmt.Println("1.Reconnect		2.Quit")
 	fmt.Scan(&l.result)
 }

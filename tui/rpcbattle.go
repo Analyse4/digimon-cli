@@ -12,7 +12,7 @@ type RPCBattle struct {
 }
 
 func (l *RPCBattle) Show() {
-	fmt.Println("please chose Rock, Paper or Scissors, input number only")
+	fmt.Println("please choose Rock, Paper or Scissors, input number only")
 	fmt.Println("1.Rock		2.Paper		3.Scissors")
 	fmt.Scan(&l.result)
 }

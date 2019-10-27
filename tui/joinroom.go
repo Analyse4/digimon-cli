@@ -9,7 +9,7 @@ type JoinRoom struct {
 }
 
 func (l *JoinRoom) Show() {
-	fmt.Println("please chose JoinRoom or Quit, input number only")
+	fmt.Println("please choose JoinRoom or Quit, input number only")
 	fmt.Println("1.JoinRoom		2.Quit")
 	fmt.Scan(&l.result)
 }

@@ -9,7 +9,7 @@ type Login struct {
 }
 
 func (l *Login) Show() {
-	fmt.Println("please chose Login or Quit, input number only")
+	fmt.Println("please choose Login or Quit, input number only")
 	fmt.Println("1.Login		2.Quit")
 	fmt.Scan(&l.result)
 }
